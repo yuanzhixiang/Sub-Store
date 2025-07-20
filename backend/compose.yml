@@ -1,0 +1,42 @@
+networks:
+  traefik:
+    external: true
+
+services:
+  sub-store.yuanzhixiang.com:
+    build: .
+    container_name: sub-store.yuanzhixiang.com
+    environment:
+      - NODE_ENV=production
+      - SUB_STORE_BACKEND_API_PORT=3000
+      - SUB_STORE_BACKEND_API_HOST=0.0.0.0
+      - SUB_STORE_BODY_JSON_LIMIT=10mb
+      # Frontend integration
+      - SUB_STORE_BACKEND_MERGE=true
+      - SUB_STORE_BACKEND_PREFIX=/api
+      - SUB_STORE_FRONTEND_BACKEND_PATH=/api
+      # Cron schedules (optional, uncomment if needed)
+      # - SUB_STORE_BACKEND_SYNC_CRON=0 0 * * *
+      # - SUB_STORE_PRODUCE_CRON=0 */6 * * *
+      # - SUB_STORE_BACKEND_DOWNLOAD_CRON=0 2 * * *
+      # - SUB_STORE_BACKEND_UPLOAD_CRON=0 3 * * *
+      # - SUB_STORE_MMDB_CRON=0 0 * * 0
+      # Data restoration (optional)
+      # - SUB_STORE_DATA_URL=https://your-backup-url
+      # MMDB paths (optional)
+      # - SUB_STORE_MMDB_COUNTRY_PATH=/app/data/Country.mmdb
+      # - SUB_STORE_MMDB_ASN_PATH=/app/data/ASN.mmdb
+    volumes:
+      - ./data:/app/data
+    restart: unless-stopped
+    networks:
+      - traefik
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.sub-store.rule=Host(`sub-store.yuanzhixiang.com`)"
+      - "traefik.http.services.sub-store.loadbalancer.server.port=3000"
+      - "traefik.docker.network=traefik"
+      # Optional: Add HTTPS redirect
+      # - "traefik.http.routers.sub-store.entrypoints=websecure"
+      # - "traefik.http.routers.sub-store.tls=true"
+      # - "traefik.http.routers.sub-store.tls.certresolver=letsencrypt"
