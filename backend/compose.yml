@@ -18,7 +18,7 @@ services:
       - SUB_STORE_DATA_BASE_PATH=/app/data
       # Cron schedules (optional, uncomment if needed)
       # - SUB_STORE_BACKEND_SYNC_CRON=0 0 * * *
-      - SUB_STORE_PRODUCE_CRON="0 */2 * * *,sub,a;0 */3 * * *,col,b"
+      - SUB_STORE_PRODUCE_CRON=0 */2 * * *,sub,a;0 */3 * * *,col,b
       # - SUB_STORE_BACKEND_DOWNLOAD_CRON=0 2 * * *
       # - SUB_STORE_BACKEND_UPLOAD_CRON=0 3 * * *
       # - SUB_STORE_MMDB_CRON=0 0 * * 0
