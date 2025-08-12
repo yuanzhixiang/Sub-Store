@@ -230,7 +230,7 @@ export function flowTransfer(flow, unit = 'B') {
     let unitIndex = unitList.indexOf(unit);
 
     return flow < 1024 || unitIndex === unitList.length - 1
-        ? { value: flow.toFixed(1), unit: unit }
+        ? { value: (Math.round(flow * 100) / 100).toString(), unit: unit }
         : flowTransfer(flow / 1024, unitList[++unitIndex]);
 }
 
@@ -342,6 +342,12 @@ export function normalizeFlowHeader(flowHeaders) {
                         ) {
                             try {
                                 decodedValue = Number(decodedValue).toFixed(0);
+                                if (
+                                    ['expire'].includes(key) &&
+                                    decodedValue <= 0
+                                ) {
+                                    decodedValue = '';
+                                }
                             } catch (e) {
                                 $.error(
                                     `Failed to convert value for key "${key}=${encodedValue}": ${

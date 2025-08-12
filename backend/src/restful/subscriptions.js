@@ -39,10 +39,8 @@ export default function register($app) {
 // subscriptions API
 async function getFlowInfo(req, res) {
     let { name } = req.params;
-    name = decodeURIComponent(name);
     let { url } = req.query;
     if (url) {
-        url = decodeURIComponent(url);
         $.info(`指定远程订阅 URL: ${url}`);
     }
     const allSubs = $.read(SUBS_KEY);
@@ -232,6 +230,7 @@ async function getFlowInfo(req, res) {
 
 function createSubscription(req, res) {
     const sub = req.body;
+    delete sub.subscriptions;
     $.info(`正在创建订阅： ${sub.name}`);
     if (/\//.test(sub.name)) {
         failed(
@@ -262,9 +261,9 @@ function createSubscription(req, res) {
 function getSubscription(req, res) {
     let { name } = req.params;
     let { raw } = req.query;
-    name = decodeURIComponent(name);
     const allSubs = $.read(SUBS_KEY);
     const sub = findByName(allSubs, name);
+    delete sub.subscriptions;
     if (sub) {
         if (raw) {
             res.set('content-type', 'application/json')
@@ -294,8 +293,8 @@ function getSubscription(req, res) {
 
 function updateSubscription(req, res) {
     let { name } = req.params;
-    name = decodeURIComponent(name); // the original name
     let sub = req.body;
+    delete sub.subscriptions;
     const allSubs = $.read(SUBS_KEY);
     const oldSub = findByName(allSubs, name);
     if (oldSub) {
@@ -357,7 +356,6 @@ function updateSubscription(req, res) {
 
 function deleteSubscription(req, res) {
     let { name } = req.params;
-    name = decodeURIComponent(name);
     $.info(`删除订阅：${name}...`);
     // delete from subscriptions
     let allSubs = $.read(SUBS_KEY);
