@@ -3,9 +3,9 @@ networks:
     external: true
 
 services:
-  sub-store.yuanzhixiang.com:
+  sub-store-yzx-rs:
     build: .
-    container_name: sub-store.yuanzhixiang.com
+    container_name: sub-store-yzx-rs
     environment:
       - NODE_ENV=production
       - SUB_STORE_BACKEND_API_PORT=3000
@@ -34,8 +34,8 @@ services:
       - traefik
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.sub-store.rule=Host(`sub-store.yzx.rs`)"
-      - "traefik.http.services.sub-store.loadbalancer.server.port=3000"
+      - "traefik.http.routers.sub-store-yzx-rs.rule=Host(`sub-store.yzx.rs`)"
+      - "traefik.http.services.sub-store-yzx-rs.loadbalancer.server.port=3000"
       - "traefik.docker.network=traefik"
       # Optional: Add HTTPS redirect
       # - "traefik.http.routers.sub-store.entrypoints=websecure"
